@@ -135,11 +135,8 @@
 const characters = 'abcdefghijklmnopqrstuvwxyz0123456789_';
 
 function makeRequest(url, added) {
-    const startTime = Date.now();
 
-    fetch(url)
-        .then(response => response.text())
-        .then(data => {
+    function interpretResult() {
             const endTime = Date.now();
             const duration = endTime - startTime;
 
@@ -155,10 +152,14 @@ function makeRequest(url, added) {
 		    i+=1;
                 }
             }
-        })
-        .catch(error => {
-            console.error('Erreur lors de la requête :', error);
-        });
+    }
+
+    const startTime = Date.now();
+
+    fetch(url)
+        .then(response => response.text())
+        .then(data => interpretResult())
+        .catch(error => interpretResult());
 }
 
 const baseUrl = 'https://web-client-ch56.challenge01.root-me.org:58056/notes/2278/';
