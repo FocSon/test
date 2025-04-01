@@ -121,17 +121,22 @@
         }
 
         function getNextQuery(currentStr) {
-            if (currentStr === "") return "a"; // Start with 'a'
+            let alpha = "abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_+=";
+
+            if (currentStr === "") return alpha[0]; // Commence avec le premier caractère
 
             let chars = currentStr.split("");
-            const lastChar = chars[chars.length - 1];
+            let lastChar = chars[chars.length - 1];
+            let index = alpha.indexOf(lastChar);
 
-            if (lastChar == 'z') {
-                return ' ';
-            } else if (lastChar === ' ') {
-                return null;
+            if (index === -1) return null; // Si un caractère inconnu est trouvé, arrête
+
+            if (index < alpha.length - 1) {
+                // Incrémente le dernier caractère
+                return currentStr.slice(0, -1) + alpha[index + 1];
             } else {
-                return currentStr.slice(0, -1) + String.fromCharCode(lastChar.charCodeAt(0) + 1);
+                // Si le dernier caractère est le dernier de alpha, ajoute un nouveau caractère
+                return null;
             }
         }
 
