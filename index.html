@@ -127,6 +127,8 @@
             const lastChar = chars[chars.length - 1];
 
             if (lastChar == 'z') {
+                return ' ';
+            } else if (lastChar === ' ') {
                 return null;
             } else {
                 return currentStr.slice(0, -1) + String.fromCharCode(lastChar.charCodeAt(0) + 1);
